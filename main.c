@@ -85,9 +85,9 @@ void btn2_pressed()
   }
 }
 
-void draw_pix_1(char *str, int j, int k, int l)
+void draw_pix_1(char *str, int j, int k, int l) //відображення пікселя з рядка на світлодіодному маніпуляторі
 {
-  if (j + k < 8)
+  if (j + k < 8) //перевірка чи знаходимося в межах області матриці світлодіодів
   {
     PORTD = (1 << (j + k));
     if (str[l] == ' ')
@@ -101,7 +101,7 @@ void draw_pix_1(char *str, int j, int k, int l)
     _delay_us(500);
   }
 
-  if ((k - j - 1 >= 0) && (l + 1 < strlen(str)))
+  if ((k - j - 1 >= 0) && (l + 1 < strlen(str))) //відображення наступного пікселя у наступному рядку
   {
     PORTD = (1 << (k - j - 1));
     if (str[l + 1] == ' ')
@@ -115,7 +115,7 @@ void draw_pix_1(char *str, int j, int k, int l)
     _delay_us(500);
   }
 
-  if ((k - j - 1 >= 0) && (l + 1 == strlen(str)))
+  if ((k - j - 1 >= 0) && (l + 1 == strlen(str))) //відображає останній рядок пікселів в рядку 
   {
     PORTD = (1 << (k - j - 1));
     PORTB = ~0;
@@ -140,7 +140,7 @@ void draw_pix_2(char *str, int j, int k, int l)
   }
 }
 
-void draw_let_1(char *str, int l)
+void draw_let_1(char *str, int l) // відображення символа
 {
   for (k = 0; k < 8; k++)
   {
@@ -148,7 +148,7 @@ void draw_let_1(char *str, int l)
     {
       for (j = 0; j < 8; j++)
       {
-        draw_pix_1(str, j, k, l);
+        draw_pix_1(str, j, k, l); //відображає конкретний піксель символу на  маніпуляторі
       }
       PORTD = 0x00;
       if (loopy == 1)
@@ -161,6 +161,24 @@ void draw_let_1(char *str, int l)
 }
 
 void draw_let_2(char *str, int l)
+{
+  for (k = 0; k < 8; k++)
+  {
+    for (i = 0; i < speed; i++)
+    {
+      for (j = 0; j < 8; j++)
+      {
+        draw_pix_2(str, j, k, l);
+      }
+      PORTD = 0x00;
+      if (loopy == 1)
+      {
+        loopy = 0;
+        break;
+      }
+    }
+  }
+}
 {
   for (k = 0; k < 8; k++)
   {
@@ -213,4 +231,3 @@ int main()
   }
   return 0;
 }
-
